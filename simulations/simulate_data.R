@@ -2,6 +2,9 @@
 require(tibble)
 require(gtools)
 
+
+#set some variables
+
 nSubjects = 10
 nLevelTypes = 2
 nLevelsPerType = 4
