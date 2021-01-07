@@ -237,7 +237,7 @@ m.SimBSJSmallBetaBinomialSlopePrior3Jym2 = brm(
   chains = 2,
   cores = 4,
   iter = 100,
-  file = 'm.SimBSJSmallBetaBinomialSlopePrior3Jym2',
+  file = 'm.SimBSJSmallBetaBinomialSlopePrior3Jym2_new',
   seed = 25,
   #inits = 0,
   control = list(adapt_delta = 0.92)
@@ -256,6 +256,7 @@ pp_check(m.SimBSJSmallBetaBinomialSlopePrior3Jym2)
 
 conditional_effects(m.SimBSJSmallBetaBinomialSlopePrior3Jym2)
 
+conditional_effects(m.SimBSJSmallBetaBinomialSlopePrior3Jym2, conditions = data.frame(ClocksInSet = 1))
 prior_summary(m.SimBSJSmallBetaBinomialSlopePrior3Jym2)
 
 
@@ -287,6 +288,64 @@ print(lc2,simplify = FALSE)
 
 round(model_weights(m.SimBSJSmallBetaBinomialSlopePrior3NoJym, m.SimBSJSmallBetaBinomialSlopePrior3Jym, m.SimBSJSmallBetaBinomialSlopePrior3Jym2,
                       weights = "loo"),digits = 10)
+
+
+
+
+
+### model interaction
+
+m.SimBSJSmallBetaBinomialSlopeJymInteraction = brm(
+  Accuracy| vint(ClocksInSet) ~ 0 + scale(nTrialLevel)*Jymmin +(1 + scale(nTrialLevel)|SubjectCode) + (1 + scale(nTrialLevel)|LevelType/Level),
+  data = sim_dat_bsj_small,
+  family = beta_binomial2,
+  stanvars = stanvars,
+  sample_prior = 'yes',
+  prior = priors3,
+  chains = 2,
+  cores = 4,
+  iter = 100,
+  file = 'm.SimBSJSmallBetaBinomialSlopeJymInteraction',
+  seed = 25,
+  #inits = 0,
+  control = list(adapt_delta = 0.92)
+)
+
+
+summary(m.SimBSJSmallBetaBinomialSlopeJymInteraction)
+plot(m.SimBSJSmallBetaBinomialSlopeJymInteraction)
+pp_check(m.SimBSJSmallBetaBinomialSlopeJymInteraction)
+
+conditional_effects(m.SimBSJSmallBetaBinomialSlopeJymInteraction)
+
+conditional_effects(m.SimBSJSmallBetaBinomialSlopeJymInteraction, conditions = data.frame(ClocksInSet = 1))
+
+
+mcmc_plot(m.SimBSJSmallBetaBinomialSlopeJymInteraction, pars = c("^r_", "^b_", '^sd_')) +
+  ggtitle('m.SimBSJSmallBetaBinomialSlopeJymInteraction')
+
+
+
+
+h4 = hypothesis(m.SimBSJSmallBetaBinomialSlopeJymInteraction, class = 'b', alpha = 0.05, hypothesis = 'Jymmin0 < Jymmin1')
+print(h4)
+plot(h4)
+
+
+h5 = hypothesis(m.SimBSJSmallBetaBinomialSlopeJymInteraction, class = 'b', alpha = 0.05, hypothesis = '0 < scalenTrialLevel:Jymmin1')
+print(h5)
+plot(h5)
+
+expose_functions(m.SimBSJSmallBetaBinomialSlopeJymInteraction, vectorize = TRUE)
+m.SimBSJSmallBetaBinomialSlopeJymInteraction = add_criterion(m.SimBSJSmallBetaBinomialSlopeJymInteraction, 'loo')
+
+
+
+
+loo(m.SimBSJSmallBetaBinomialSlopeJymInteraction, m.SimBSJSmallBetaBinomialSlopePrior3Jym2)
+
+##### commented stuff #####
+
 
 # 
 # 
