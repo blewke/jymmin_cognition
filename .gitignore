@@ -10,3 +10,4 @@
 *.log
 *.tex
 .Rproj.user
+*.DS_Store
