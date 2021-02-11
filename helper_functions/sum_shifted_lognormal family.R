@@ -48,11 +48,17 @@ posterior_predict_sum_shifted_lognormal <- function(i, prep, ...) {
   rshifted_lnorm(1,mu_sum, sqrt(var_sum), ndt_sum)
 }
 
-
+######this is correct now maybe??? !!!!!!!!!
 posterior_epred_sum_shifted_lognormal <- function(prep) {
-  mu <- prep$dpars$mu
+  mu_underlying <- prep$dpars$mu
   set_size <- prep$data$vint1
-  set_size <- matrix(set_size, nrow = nrow(mu), ncol = ncol(mu), byrow = TRUE)
-  mu * set_size
+  sigma_underlying <- prep$dpars$sigma
+  ndt_underlying <- prep$dpars$shift
+  set_size <- matrix(set_size, nrow = nrow(mu_underlying), ncol = ncol(mu_underlying), byrow = TRUE)
+  var_sum <- log((exp(sigma_underlying^2)-1)/set_size + 1 );
+  mu_sum <- log(set_size*exp(mu_underlying))+0.5*(sigma_underlying^2 - var_sum);
+  ndt_sum <- ndt_underlying*set_size
+  
+  exp(mu_sum + var_sum / 2) + ndt_sum
 }
 
