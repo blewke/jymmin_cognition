@@ -18,6 +18,16 @@ stan_funs_ssln <- "
   
   return lognormal_lpdf(new_y | mu_sum, sqrt(var_sum));
   }
+  
+  real sum_shifted_lognormal_rng(real mu_underlying, real sigma_underlying, real ndt_underlying,int set_size) {
+  real var_sum = log((exp(square(sigma_underlying))-1)/set_size + 1 );
+  real mu_sum = log(set_size*exp(mu_underlying))+0.5*(square(sigma_underlying) - var_sum);
+  real ndt_sum = ndt_underlying*set_size;
+  
+  return lognormal_rng(mu_sum, sqrt(var_sum)) + ndt_sum;
+  
+  }
+  
   "
 
 
@@ -34,7 +44,8 @@ log_lik_sum_shifted_lognormal <- function(i, prep) {
 }
 
 
- 
+
+
 posterior_predict_sum_shifted_lognormal <- function(i, prep, ...) {
   mu_underlying <- prep$dpars$mu[, i]
   sigma_underlying <- prep$dpars$sigma
@@ -42,11 +53,12 @@ posterior_predict_sum_shifted_lognormal <- function(i, prep, ...) {
   ndt_underlying <- prep$dpars$shift
   set_size <- prep$data$vint1[i]
   
-  var_sum = log((exp(sigma_underlying^2)-1)/set_size + 1 );
-  mu_sum = log(set_size*exp(mu_underlying))+0.5*(sigma_underlying^2 - var_sum);
-  ndt_sum = ndt_underlying*set_size
-  rshifted_lnorm(1,mu_sum, sqrt(var_sum), ndt_sum)
+  
+  sum_shifted_lognormal_rng(mu_underlying, sigma_underlying, ndt_underlying, set_size)
 }
+
+
+
 
 ######this is correct now maybe??? !!!!!!!!!
 posterior_epred_sum_shifted_lognormal <- function(prep) {

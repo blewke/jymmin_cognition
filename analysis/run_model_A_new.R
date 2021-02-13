@@ -6,13 +6,13 @@ require(brms)
 source("../analysis/data_preprocessing.r")
 source('../helper_functions/sum_shifted_lognormal family.R')
 source('../helper_functions/beta binomial family.R')
-source('../helper_functions/stanvars bb ssln.R')
+#source('../helper_functions/stanvars bb ssln.R')
 
 #stanvars_ssln <- stanvar(scode = stan_funs_ssln, block = "functions")
-stanvars_bb_ssln <- stanvar(scode = stan_funs_bb_ssln, block = "functions")
+#stanvars_bb_ssln <- stanvar(scode = stan_funs_bb_ssln, block = "functions")
 #stanvars_bb <- stanvar(scode = stan_funs, block = "functions")
 
-
+stanvars_bb_ssln <- stanvar(scode = paste(stan_funs_ssln, stan_funs), block = "functions")
 
 
 
