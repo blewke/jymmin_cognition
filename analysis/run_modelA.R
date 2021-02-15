@@ -3,21 +3,23 @@ require(brms)
 #require(tidyverse)
 
 #brms families
-source("/Users/brittalewke/Documents/Canada Data and scripts/jymmin_cognition/analysis/data_preprocessing.r")
-source('/Users/brittalewke/Documents/Canada Data and scripts/jymmin_cognition/helper_functions/sum_shifted_lognormal family.R')
-source('/Users/brittalewke/Documents/Canada Data and scripts/jymmin_cognition/helper_functions/beta binomial family.R')
-#source('/Users/brittalewke/Documents/Canada Data and scripts/jymmin_cognition/helper_functions/stanvars bb ssln.R')
+source("../analysis/data_preprocessing.r")
+source('../helper_functions/sum_shifted_lognormal family.R')
+source('../helper_functions/beta binomial family.R')
+#source('../helper_functions/stanvars bb ssln.R')
+
 
 #stanvars_ssln <- stanvar(scode = stan_funs_ssln, block = "functions")
 #stanvars_bb_ssln <- stanvar(scode = stan_funs_bb_ssln, block = "functions")
 #stanvars_bb <- stanvar(scode = stan_funs, block = "functions")
+
 stanvars_bb_ssln <- stanvar(scode = paste(stan_funs_ssln, stan_funs), block = "functions")
 
-
-
+#priors
+source("../analysis/priors.r")
 
 #load data
-source("/Users/brittalewke/Documents/Canada Data and scripts/jymmin_cognition/analysis/data_preprocessing.r")
+#source("/Users/brittalewke/Documents/Canada Data and scripts/jymmin_cognition/analysis/data_preprocessing.r")
 
 all_data = data_preprocessing("/Users/brittalewke/Documents/Canada Data and scripts/Data_blindx.csv")
 all_data = add_nTrialLevel(all_data)
@@ -34,29 +36,13 @@ study_data$nTrialLevelScale = study_data$nTrialLevel/mean(study_data$nTrialLevel
 
 study_data_timed = study_data[study_data$LevelType == 0,]
 
+rm(all_data)
+rm(subject_data)
+rm(study_data)
+rm(rdata)
 
 
-
-priorModelA = c(prior(student_t(3,2,8), class = Intercept, resp = 'DurationInSeconds'),
-            prior(student_t(3,0,2), class = sd, group = 'Level', resp = 'DurationInSeconds'),
-            prior(student_t(3,0,3), class = sd, group = 'SubjectCode', resp = 'DurationInSeconds'),
-            prior(student_t(3,0,5), class = sigma, resp = 'DurationInSeconds'),
-            prior(normal(1,2), class = shift, resp = 'DurationInSeconds'),
-            prior(student_t(3, 0.5, 2), class = b, coef = 'nTrialLevelScale', resp = 'DurationInSeconds'),
-            prior(student_t(3,0,0.5), class = sd, coef = 'nTrialLevelScale', group = 'SubjectCode', resp = 'DurationInSeconds'),
-            prior(student_t(3,0,0.5), class = sd, coef = 'nTrialLevelScale', group = 'Level', resp = 'DurationInSeconds'),
-            
-            prior(student_t(3,0,2.5), class = Intercept, resp = 'nCorrect'),
-            prior(student_t(3,0,2), class = sd, group = 'Level', resp = 'nCorrect'),
-            prior(student_t(3,0,2), class = sd,group = 'SubjectCode', resp = 'nCorrect'),
-            prior(gamma(3,0.1), class = phi, resp = 'nCorrect'),
-            prior(student_t(3, 0.5, 8), class = b, coef = 'nTrialLevelScale', resp = 'nCorrect'),
-            prior(student_t(3,0,4), class = sd, coef = 'nTrialLevelScale', group = 'SubjectCode', resp = 'nCorrect'),
-            prior(student_t(3,0,4), class = sd, coef = 'nTrialLevelScale', group = 'Level', resp = 'nCorrect')
-)
-
-
-
+priorModelA = c (priors_accuracy, priors_duration)
 
 ModelA =  brm (
   data = study_data_timed,
@@ -73,8 +59,15 @@ ModelA =  brm (
   chains = 4,
   iter = 2000,
   seed = 4,
-  file = 'ModelA',
-  sample_file = 'ModelAchaindata',
-  control = list(adapt_delta = 0.99, max_treedepth = 15)
+  file = '../results/ModelA3',
+  sample_file = '../results/ModelA3chaindata',
+  control = list(adapt_delta = 0.99, max_treedepth = 14)
   
 )
+
+ModelA_loo = loo(ModelA, moment_match = TRUE)
+
+save(list = 'ModelA_loo', file ='../results/ModelA3_loo.RData')
+
+#model$loo <- loo(model, reloo= TRUE)
+
