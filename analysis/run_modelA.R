@@ -65,6 +65,9 @@ ModelA =  brm (
   
 )
 
+
+expose_functions(ModelA, vectorize = TRUE)
+
 ModelA_loo = loo(ModelA, moment_match = TRUE)
 
 save(list = 'ModelA_loo', file ='../results/ModelA3_loo.RData')

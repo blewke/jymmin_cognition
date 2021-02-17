@@ -14,19 +14,20 @@ source('../helper_functions/beta binomial family.R')
 stanvars_bb_ssln <- stanvar(scode = paste(stan_funs_ssln, stan_funs), block = "functions")
 
 
-
+#priors
+source("../analysis/priors.r")
 
 #load data
 #source("/Users/brittalewke/Documents/Canada Data and scripts/jymmin_cognition/analysis/data_preprocessing.r")
 
-all_data = data_preprocessing("/Users/brittalewke/Documents/Canada Data and scripts/Data_blindx.csv")
+all_data = data_preprocessing("/Users/brittalewke/Documents/Canada Data and scripts/Jymmin_data.csv", dateformat = 'mdy')
 all_data = add_nTrialLevel(all_data)
 #rdata = random_assignment(all_data)
 
-subject_data = all_data[all_data$SubjectCode %in% 1:24,]
+subject_data = all_data[!substring(all_data$SubjectCode,1,1) == 'X',]
 
 
-rdata = random_assignment(subject_data)
+rdata = real_assignment(subject_data)
 
 study_data = rdata[rdata$Period %in% 1:2  & rdata$Stage == 'Exercise',]
 study_data = remove_empty_rows(study_data)
@@ -40,33 +41,7 @@ rm(study_data)
 rm(rdata)
 
 
-
-priorModelB = c(prior(student_t(3,2,8), class = Intercept, resp = 'DurationInSeconds'),
-                prior(student_t(3,0,2), class = sd, group = 'Level', resp = 'DurationInSeconds'),
-                prior(student_t(3,0,3), class = sd, group = 'SubjectCode', resp = 'DurationInSeconds'),
-                prior(student_t(3,0,5), class = sigma, resp = 'DurationInSeconds'),
-                prior(normal(1,2), class = shift, resp = 'DurationInSeconds'),
-                prior(student_t(3, 0.5, 2), class = b, coef = 'nTrialLevelScale', resp = 'DurationInSeconds'),
-                prior(student_t(3,0,0.5), class = sd, coef = 'nTrialLevelScale', group = 'SubjectCode', resp = 'DurationInSeconds'),
-                prior(student_t(3,0,0.5), class = sd, coef = 'nTrialLevelScale', group = 'Level', resp = 'DurationInSeconds'),
-                
-                prior(student_t(3,0,2.5), class = Intercept, resp = 'nCorrect'),
-                prior(student_t(3,0,2), class = sd, group = 'Level', resp = 'nCorrect'),
-                prior(student_t(3,0,2), class = sd,group = 'SubjectCode', resp = 'nCorrect'),
-                prior(gamma(3,0.1), class = phi, resp = 'nCorrect'),
-                prior(student_t(3, 0.5, 8), class = b, coef = 'nTrialLevelScale', resp = 'nCorrect'),
-                prior(student_t(3,0,4), class = sd, coef = 'nTrialLevelScale', group = 'SubjectCode', resp = 'nCorrect'),
-                prior(student_t(3,0,4), class = sd, coef = 'nTrialLevelScale', group = 'Level', resp = 'nCorrect'),
-                
-                prior(student_t(3,0,4), class = b, coef = 'JymminYes', resp = 'DurationInSeconds'),
-                prior(student_t(3,0,4), class = b, coef = 'JymminYes:nTrialLevelScale', resp = 'DurationInSeconds'),
-                
-                prior(student_t(3,0,8), class = b, coef = 'JymminYes', resp = 'nCorrect'),
-                prior(student_t(3,0,4), class = b, coef = 'JymminYes:nTrialLevelScale', resp = 'nCorrect')
-)
-
-
-
+priorModelB = c (priors_accuracy, priors_duration, priors_jymmin)
 
 ModelB =  brm (
   data = study_data_timed,
@@ -81,12 +56,16 @@ ModelB =  brm (
   stanvars = stanvars_bb_ssln, 
   cores = 4,
   chains = 4,
-  iter = 2000,
+  iter = 20,
   seed = 4,
-  file = '../results/ModelB',
-  sample_file = '../results/ModelBchaindata',
-  control = list(adapt_delta = 0.99, max_treedepth = 15)
+  #file = '../results/ModelB2',
+  sample_file = '../results/ModelB2chaindata',
+  control = list(adapt_delta = 0.99, max_treedepth = 14)
   
 )
 
+expose_functions(ModelB, vectorize = TRUE)
 
+ModelB_loo = loo(ModelB, moment_match = TRUE)
+
+save(list = 'ModelB_loo', file ='../results/ModelB3_loo.RData')
