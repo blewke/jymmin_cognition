@@ -3,7 +3,8 @@
 
 
 priors_duration = #prior(student_t(3,2,8), class = Intercept, resp = 'DurationInSeconds'),
-   c(prior(student_t(3,2,2.5), class = Intercept, resp = 'DurationInSeconds'), ## new!
+   #c(prior(student_t(3,2,2.5), class = Intercept, resp = 'DurationInSeconds'), ## new!
+     c(prior(student_t(3,1,1), class = Intercept, resp = 'DurationInSeconds'),
      
      
      #prior(student_t(3,0,2), class = sd, group = 'Level', resp = 'DurationInSeconds'),

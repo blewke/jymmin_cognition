@@ -56,9 +56,9 @@ ModelB =  brm (
   stanvars = stanvars_bb_ssln, 
   cores = 4,
   chains = 4,
-  iter = 20,
+  iter = 2000,
   seed = 4,
-  #file = '../results/ModelB2',
+  file = '../results/ModelB2',
   sample_file = '../results/ModelB2chaindata',
   control = list(adapt_delta = 0.99, max_treedepth = 14)
   
@@ -66,6 +66,6 @@ ModelB =  brm (
 
 expose_functions(ModelB, vectorize = TRUE)
 
-ModelB_loo = loo(ModelB, moment_match = TRUE)
+ModelB2_loo = loo(ModelB, moment_match = TRUE)
 
-save(list = 'ModelB_loo', file ='../results/ModelB3_loo.RData')
+save(list = 'ModelB2_loo', file ='../results/ModelB2_loo.RData')
