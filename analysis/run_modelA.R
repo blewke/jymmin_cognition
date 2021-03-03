@@ -1,31 +1,24 @@
 require(brms)
-#require(tibble)
-#require(tidyverse)
+require(cmdstanr)
 
 #brms families
-source("../analysis/data_preprocessing.r")
+source("../analysis/data_preprocessing.R")
 source('../helper_functions/sum_shifted_lognormal family.R')
 source('../helper_functions/beta binomial family.R')
-#source('../helper_functions/stanvars bb ssln.R')
-
-
-#stanvars_ssln <- stanvar(scode = stan_funs_ssln, block = "functions")
-#stanvars_bb_ssln <- stanvar(scode = stan_funs_bb_ssln, block = "functions")
-#stanvars_bb <- stanvar(scode = stan_funs, block = "functions")
 
 stanvars_bb_ssln <- stanvar(scode = paste(stan_funs_ssln, stan_funs), block = "functions")
 
 #priors
-source("../analysis/priors.r")
+source("../analysis/priors.R")
 
-#load data
-#source("/Users/brittalewke/Documents/Canada Data and scripts/jymmin_cognition/analysis/data_preprocessing.r")
+#all_data = data_preprocessing("../jym_data/Data_blindx.csv")
 
-all_data = data_preprocessing("/Users/brittalewke/Documents/Canada Data and scripts/Data_blindx.csv")
+all_data = data_preprocessing("../jym_data/Jymmin_data.csv", dateformat = 'mdy')
 all_data = add_nTrialLevel(all_data)
 #rdata = random_assignment(all_data)
 
-subject_data = all_data[all_data$SubjectCode %in% 1:24,]
+#subject_data = all_data[all_data$SubjectCode %in% 1:24,]
+subject_data = all_data[!substring(all_data$SubjectCode,1,1) == 'X',]
 
 
 rdata = random_assignment(subject_data)
@@ -59,18 +52,19 @@ ModelA =  brm (
   chains = 4,
   iter = 2000,
   seed = 4,
-  file = '../results/ModelA3',
-  sample_file = '../results/ModelA3chaindata',
+  file = '../results/ModelA',
+  sample_file = '../results/ModelAchaindata',
   control = list(adapt_delta = 0.99, max_treedepth = 14)
   
 )
 
+sessionInfo()
 
 expose_functions(ModelA, vectorize = TRUE)
 
 ModelA_loo = loo(ModelA, moment_match = TRUE)
 
-save(list = 'ModelA_loo', file ='../results/ModelA3_loo.RData')
+save(list = 'ModelA_loo', file ='../results/ModelA_loo.RData')
 
 #model$loo <- loo(model, reloo= TRUE)
 

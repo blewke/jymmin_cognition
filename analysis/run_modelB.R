@@ -1,26 +1,16 @@
 require(brms)
-#require(tibble)
-#require(tidyverse)
 
 #brms families
-source("../analysis/data_preprocessing.r")
+source("../analysis/data_preprocessing.R")
 source('../helper_functions/sum_shifted_lognormal family.R')
 source('../helper_functions/beta binomial family.R')
-#source('../helper_functions/stanvars bb ssln.R')
 
-#stanvars_ssln <- stanvar(scode = stan_funs_ssln, block = "functions")
-#stanvars_bb_ssln <- stanvar(scode = stan_funs_bb_ssln, block = "functions")
-#stanvars_bb <- stanvar(scode = stan_funs, block = "functions")
 stanvars_bb_ssln <- stanvar(scode = paste(stan_funs_ssln, stan_funs), block = "functions")
 
-
 #priors
-source("../analysis/priors.r")
+source("../analysis/priors.R")
 
-#load data
-#source("/Users/brittalewke/Documents/Canada Data and scripts/jymmin_cognition/analysis/data_preprocessing.r")
-
-all_data = data_preprocessing("/Users/brittalewke/Documents/Canada Data and scripts/Jymmin_data.csv", dateformat = 'mdy')
+all_data = data_preprocessing("../jym_data/Jymmin_data.csv", dateformat = 'mdy')
 all_data = add_nTrialLevel(all_data)
 #rdata = random_assignment(all_data)
 
@@ -58,14 +48,15 @@ ModelB =  brm (
   chains = 4,
   iter = 2000,
   seed = 4,
-  file = '../results/ModelB2',
-  sample_file = '../results/ModelB2chaindata',
+  file = '../results/ModelB',
+  sample_file = '../results/ModelBchaindata',
   control = list(adapt_delta = 0.99, max_treedepth = 14)
-  
 )
+
+sessionInfo()
 
 expose_functions(ModelB, vectorize = TRUE)
 
 ModelB2_loo = loo(ModelB, moment_match = TRUE)
 
-save(list = 'ModelB2_loo', file ='../results/ModelB2_loo.RData')
+save(list = 'ModelB2_loo', file ='../results/ModelB_loo.RData')
