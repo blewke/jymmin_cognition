@@ -212,15 +212,13 @@ add_nTrialLevel = function(df){
 #' @return same dataframe data frame with the additional columnn nTrialScaled.
 
 
-add_nTrialsScaled = function(df){
+add_nTrialScale = function(df){
   
-  #foe every subject and every level, find out how many trails have occurred
+  #for every subject and every level, find out how many trails have occurred
   trials = aggregate(df[,c('ClocksInSet')], by = list(SubjectCode = df$SubjectCode, Level = df$Level), FUN = sum)
-  
   mean_nTrials_perS_perL = mean(trials$x)
-  df$nTrialScaled = NA
-  df$nTrialScaled = df$nTrialLevel/mean_nTrials_perS_perL
-  
+  df$nTrialScale = NA
+  df$nTrialScale = df$nTrialLevel/mean_nTrials_perS_perL
   return(df)
 }
   
