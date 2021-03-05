@@ -13,7 +13,7 @@ source("../analysis/priors.R")
 
 #all_data = data_preprocessing("../jym_data/Data_blindx.csv")
 
-all_data = data_preprocessing("../jym_data/Jymmin_data.csv", dateformat = 'mdy')
+all_data = data_preprocessing("../jym_data/Jymmin_Data.csv", dateformat = 'mdy')
 all_data = add_nTrialLevel(all_data)
 #rdata = random_assignment(all_data)
 
