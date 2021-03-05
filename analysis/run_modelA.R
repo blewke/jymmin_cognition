@@ -21,13 +21,14 @@ all_data = add_nTrialLevel(all_data)
 subject_data = all_data[!substring(all_data$SubjectCode,1,1) == 'X',]
 
 
-rdata = random_assignment(subject_data)
+rdata = real_assignment(subject_data)
 
 study_data = rdata[rdata$Period %in% 1:2  & rdata$Stage == 'Exercise',]
 study_data = remove_empty_rows(study_data)
-study_data$nTrialLevelScale = study_data$nTrialLevel/mean(study_data$nTrialLevel)
 
 study_data_timed = study_data[study_data$LevelType == 0,]
+study_data_timed = add_nTrialLevel(study_data_timed)
+
 
 rm(all_data)
 rm(subject_data)
@@ -40,8 +41,8 @@ priorModelA = c (priors_accuracy, priors_duration)
 ModelA =  brm (
   data = study_data_timed,
   formula =
-    bf (DurationInSeconds|vint(ClocksInSet) ~ 1 + nTrialLevelScale + (1 + nTrialLevelScale|s|SubjectCode) + (1 + nTrialLevelScale|l|Level) , family = sum_shifted_lognormal)+
-    bf (nCorrect|vint(ClocksInSet) ~ 1 + nTrialLevelScale + (1 + nTrialLevelScale|s|SubjectCode) + (1 + nTrialLevelScale|l|Level) , family = beta_binomial2)
+    bf (DurationInSeconds|vint(ClocksInSet) ~ 1 + nTrialScale + (1 + nTrialScale|s|SubjectCode) + (1 + nTrialScale|l|Level) , family = sum_shifted_lognormal)+
+    bf (nCorrect|vint(ClocksInSet) ~ 1 + nTrialScale + (1 + nTrialScale|s|SubjectCode) + (1 + nTrialScale|l|Level) , family = beta_binomial2)
   ,
   prior = priorModelA,
   #backend = 'cmdstanr',
