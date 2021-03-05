@@ -200,9 +200,30 @@ add_nTrialLevel = function(df){
   
   return(df) 
   
-  
-  
 }
+
+#' scale the number of trials by the mean number of trials needed in each level
+#' 
+#' add a new column nTrialScaled to the dataframe.
+#' columns Level, SubjectCode and nTrialLevel need to exist
+#' 
+#' 
+#' @param df  a data frame with the right columns.
+#' @return same dataframe data frame with the additional columnn nTrialScaled.
+
+
+add_nTrialsScaled = function(df){
+  
+  #foe every subject and every level, find out how many trails have occurred
+  trials = aggregate(df[,c('ClocksInSet')], by = list(SubjectCode = df$SubjectCode, Level = df$Level), FUN = sum)
+  
+  mean_nTrials_perS_perL = mean(trials$x)
+  df$nTrialScaled = NA
+  df$nTrialScaled = df$nTrialLevel/mean_nTrials_perS_perL
+  
+  return(df)
+}
+  
 
 
 
