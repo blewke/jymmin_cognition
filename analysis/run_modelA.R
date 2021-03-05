@@ -27,7 +27,7 @@ study_data = rdata[rdata$Period %in% 1:2  & rdata$Stage == 'Exercise',]
 study_data = remove_empty_rows(study_data)
 
 study_data_timed = study_data[study_data$LevelType == 0,]
-study_data_timed = add_nTrialLevel(study_data_timed)
+study_data_timed = add_nTrialScale(study_data_timed)
 
 
 rm(all_data)

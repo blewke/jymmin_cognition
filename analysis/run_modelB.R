@@ -24,7 +24,7 @@ study_data = remove_empty_rows(study_data)
 #study_data$nTrialLevelScale = study_data$nTrialLevel/mean(study_data$nTrialLevel)
 
 study_data_timed = study_data[study_data$LevelType == 0,]
-study_data_timed = add_nTrialLevel(study_data_timed)
+study_data_timed = add_nTrialScale(study_data_timed)
 
 
 
