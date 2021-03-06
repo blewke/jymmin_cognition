@@ -87,6 +87,8 @@ ModelA =  brm (
   
 )
 
+summary(ModelA)
+
 sessionInfo()
 
 expose_functions(ModelA, vectorize = TRUE)

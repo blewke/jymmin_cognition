@@ -86,12 +86,12 @@ ModelA =  brm (
   stanvars = stanvars_bb_ssln, 
   cores = 6,
   chains = 6,
-  warmup = 100,
-  iter = 200,
+  warmup = 1000,
+  iter = 1800,
   seed = 4,
-  file = '../results/ModelA_rtdelta08',
+  file = '../results/ModelA_rtdelta085',
   #sample_file = '../results/ModelArtchaindata',
-  control = list(adapt_delta = 0.80, max_treedepth = 14)
+  control = list(adapt_delta = 0.85, max_treedepth = 14)
   
 )
 
@@ -105,7 +105,7 @@ ModelA_loo = loo(ModelA, moment_match = TRUE)
 
 ModelA_loo
 
-save(list = 'ModelA_loo', file ='../results/ModelA_loo_delta08).RData')
+save(list = 'ModelA_loo', file ='../results/ModelA_loo_delta085).RData')
 
 #model$loo <- loo(model, reloo= TRUE)
 
