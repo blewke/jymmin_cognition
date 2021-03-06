@@ -32,16 +32,26 @@ priors_duration = #prior(student_t(3,2,8), class = Intercept, resp = 'DurationIn
      )
 
 
-priors_accuracy = c(prior(student_t(3,0,2.5), class = Intercept, resp = 'nCorrect'),
-                    prior(student_t(3,0,2), class = sd, group = 'Level', resp = 'nCorrect'),
-                    prior(student_t(3,0,2), class = sd,group = 'SubjectCode', resp = 'nCorrect'),
+priors_accuracy = c(
+                    #prior(student_t(3,0,2.5), class = Intercept, resp = 'nCorrect'),
+                    prior(normal(0,2), class = Intercept, resp = 'nCorrect'),
+                    
+                    #prior(student_t(3,0,2), class = sd, group = 'Level', resp = 'nCorrect'),
+                    prior(normal(0,1), class = sd, group = 'Level', resp = 'nCorrect'),
+                    #prior(student_t(3,0,2), class = sd,group = 'SubjectCode', resp = 'nCorrect'),
+                    prior(normal(0,1), class = sd, group = 'SubjectCode', resp = 'nCorrect'),
+                    
                     prior(gamma(3,0.1), class = phi, resp = 'nCorrect'),
                     
                     #prior(student_t(3, 0.5, 8), class = b, coef = 'nTrialLevelScale', resp = 'nCorrect'),
-                    prior(student_t(3, 0.5, 2), class = b, coef = 'nTrialScale', resp = 'nCorrect'), ## new!!!!!
+                    #prior(student_t(3, 0.5, 2), class = b, coef = 'nTrialScale', resp = 'nCorrect'),
+                    prior(normal(1, 1.5), class = b, coef = 'nTrialScale', resp = 'nCorrect'),
                     
-                    prior(student_t(3,0,1.5), class = sd, coef = 'nTrialScale', group = 'SubjectCode', resp = 'nCorrect'),
-                    prior(student_t(3,0,1.5), class = sd, coef = 'nTrialScale', group = 'Level', resp = 'nCorrect')#,)
+                    #prior(student_t(3,0,1.5), class = sd, coef = 'nTrialScale', group = 'SubjectCode', resp = 'nCorrect'),
+                    #prior(student_t(3,0,1.5), class = sd, coef = 'nTrialScale', group = 'Level', resp = 'nCorrect')
+                    prior(normal(0,0.75), class = sd, coef = 'nTrialScale', group = 'SubjectCode', resp = 'nCorrect'),
+                    prior(normal(0,0.75), class = sd, coef = 'nTrialScale', group = 'Level', resp = 'nCorrect')
+                    
 )
 
   
