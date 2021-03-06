@@ -81,9 +81,9 @@ ModelA =  brm (
   warmup = 100,
   iter = 200,
   seed = 4,
-  file = '../results/ModelA_Acc',
+  file = '../results/ModelA_Acc95',
   sample_file = '../results/ModelAccchaindata',
-  control = list(adapt_delta = 0.90, max_treedepth = 14)
+  control = list(adapt_delta = 0.95, max_treedepth = 14)
   
 )
 
