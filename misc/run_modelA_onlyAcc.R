@@ -78,10 +78,10 @@ ModelA =  brm (
   stanvars = stanvars_bb_ssln, 
   cores = 6,
   chains = 6,
-  warmup = 100,
-  iter = 200,
+  warmup = 1000,
+  iter = 1800,
   seed = 4,
-  file = '../results/ModelA_Acc95',
+  file = '../results/ModelA_Acc95iter1800',
   sample_file = '../results/ModelAccchaindata',
   control = list(adapt_delta = 0.95, max_treedepth = 14)
   
@@ -94,6 +94,7 @@ sessionInfo()
 expose_functions(ModelA, vectorize = TRUE)
 
 ModelA_loo = loo(ModelA, moment_match = TRUE)
+ModelA_loo
 
 save(list = 'ModelA_loo', file ='../results/ModelAAcc_loo.RData')
 

@@ -54,11 +54,13 @@ ModelA =  brm (
   warmup = 1000,
   iter = 1800,
   seed = 4,
-  file = '../results/ModelA',
+  file = '../results/ModelA_20210307',
   sample_file = '../results/ModelAchaindata',
-  control = list(adapt_delta = 0.99, max_treedepth = 14)
+  control = list(adapt_delta = 0.95, max_treedepth = 14)
   
 )
+
+summary(ModelA)
 
 sessionInfo()
 
@@ -66,7 +68,9 @@ expose_functions(ModelA, vectorize = TRUE)
 
 ModelA_loo = loo(ModelA, moment_match = TRUE)
 
-save(list = 'ModelA_loo', file ='../results/ModelA_loo.RData')
+ModelA_loo
+
+save(list = 'ModelA_loo', file ='../results/ModelA_20210307_loo.RData')
 
 #model$loo <- loo(model, reloo= TRUE)
 

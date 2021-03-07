@@ -54,13 +54,17 @@ ModelB =  brm (
   seed = 4,
   file = '../results/ModelB',
   sample_file = '../results/ModelBchaindata',
-  control = list(adapt_delta = 0.99, max_treedepth = 14)
+  control = list(adapt_delta = 0.95, max_treedepth = 14)
 )
+
+summary(ModelB)
 
 sessionInfo()
 
 expose_functions(ModelB, vectorize = TRUE)
 
-ModelB2_loo = loo(ModelB, moment_match = TRUE)
+ModelB_loo = loo(ModelB, moment_match = TRUE)
+
+ModelB_loo
 
 save(list = 'ModelB2_loo', file ='../results/ModelB_loo.RData')
