@@ -55,19 +55,19 @@ priors_accuracy = c(
 )
 
   
-priors_jymmin = c( prior(student_t(3,0,1.5), class = b, coef = 'JymminYes', resp = 'DurationInSeconds'),
-                   prior(student_t(3,0,1), class = b, coef = 'JymminYes:nTrialScale', resp = 'DurationInSeconds'),
+priors_jymmin = c( prior(normal(0,0.5), class = b, coef = 'JymminYes', resp = 'DurationInSeconds'),
+                   prior(normal(0,0.5), class = b, coef = 'JymminYes:nTrialScale', resp = 'DurationInSeconds'),
                    
-                   prior(student_t(3,0,2), class = b, coef = 'JymminYes', resp = 'nCorrect'),
-                   prior(student_t(3,0,2), class = b, coef = 'JymminYes:nTrialScale', resp = 'nCorrect')
+                   prior(normal(0,0.75), class = b, coef = 'JymminYes', resp = 'nCorrect'),
+                   prior(normal(0,0.75), class = b, coef = 'JymminYes:nTrialScale', resp = 'nCorrect')
 )
 
 
 
-priors_period = c( prior(student_t(3,0,1.5), class = b, coef = 'Period2', resp = 'DurationInSeconds'),
-                   prior(student_t(3,0,1), class = b, coef = 'Period2:nTrialScale', resp = 'DurationInSeconds'),
+priors_period = c( prior(normal(0,0.5), class = b, coef = 'Period2', resp = 'DurationInSeconds'),
+                   prior(normal(0,0.5), class = b, coef = 'Period2:nTrialScale', resp = 'DurationInSeconds'),
                    
-                   prior(student_t(3,0,2), class = b, coef = 'Period2', resp = 'nCorrect'),
-                   prior(student_t(3,0,2), class = b, coef = 'Period2:nTrialScale', resp = 'nCorrect')
+                   prior(normal(0,0.75), class = b, coef = 'Period2', resp = 'nCorrect'),
+                   prior(normal(0,0.75), class = b, coef = 'Period2:nTrialScale', resp = 'nCorrect')
 )
 
