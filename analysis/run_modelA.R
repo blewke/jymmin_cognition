@@ -54,7 +54,7 @@ ModelA =  brm (
   warmup = 1000,
   iter = 1800,
   seed = 4,
-  file = '../results/ModelA_20210307',
+  file = '../results/ModelA_20210308',
   sample_file = '../results/ModelAchaindata',
   control = list(adapt_delta = 0.95, max_treedepth = 14)
   
@@ -70,7 +70,7 @@ ModelA_loo = loo(ModelA, moment_match = TRUE)
 
 ModelA_loo
 
-save(list = 'ModelA_loo', file ='../results/ModelA_20210307_loo.RData')
+save(list = 'ModelA_loo', file ='../results/ModelA_20210308_loo.RData')
 
 #model$loo <- loo(model, reloo= TRUE)
 
