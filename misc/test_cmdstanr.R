@@ -9,13 +9,16 @@ source('../helper_functions/beta binomial family.R')
 
 stanvars_bb_ssln <- stanvar(scode = paste(stan_funs_ssln, stan_funs), block = "functions")
 
-dat = tibble( x = c(1,2,3,4,5), y = c(6,7,8,9,0))
+dat = tibble( x = c(1,2,3,4,10), y = c(6,7,8,9,0))
 
 print('fit model m1')
 m1 = brm(data = dat,formula = y|vint(10) ~ x, cores = 4, 
          family = beta_binomial2,
          #file = 'test_brms',
-         backend = 'cmdstanr',
+         #backend = 'cmdstanr',
+         #future = TRUE,
+         #control = list(adapt_delta = 0.99, max_treedepth = 14),
+         #iter = 5000,
          stanvars = stanvars_bb_ssln)
 
 #summary(m1)
@@ -26,15 +29,26 @@ m2 = brm(data = dat,formula = y|trials(10) ~ x, cores = 4,
          backend = 'cmdstanr',
          stanvars = stanvars_bb_ssln)
 
-print('fit a helper model with rstan as backend, just to be able to expose its functions. shoudl warning aoccur for this fit, they can be ignored.')
-mrstangauss = brm(data = data.frame(y =  c(1,2)),formula = y ~ 1, chains = 2, cores = 2, 
+
+m1rstan = brm(data = dat,formula = y|vint(10) ~ x, cores = 4, 
+         family = beta_binomial2,
+         #file = 'test_brms',
+         backend = 'rstan',
+         #future = TRUE,
+         save_pars = save_pars(all=TRUE),
+         stanvars = stanvars_bb_ssln)
+
+
+
+print('fit a helper model with rstan as backend, just to be able to expose its functions. should warning aoccur for this fit, they can be ignored.')
+mrstangauss = brm(data = data.frame(y =  c(1,2)),formula = y ~ 1, chains = 1, cores = 1, 
          family = gaussian,
          #file = 'test_brms',
          #backend = 'cmdstanr',
          stanvars = stanvars_bb_ssln,
          #save_pars = save_pars(all=TRUE),
          backend = 'rstan',
-         iter = 1500,
+         iter = 1,
          seed = 20
          )
 
@@ -56,10 +70,19 @@ print('end of ignorable warnings')
 #loo(m1)
 
 print('compute loo with reloo for m1')
-m1 = add_criterion(m1, 'loo', reloo = 'TRUE')
+m1 = add_criterion(m1, 'loo', reloo = 'TRUE', overwrite = TRUE)
 print('compute loo with reloo for m2')
 m2 = add_criterion(m2, 'loo', reloo = 'TRUE')
 
+m1$criteria = NULL
+
+reloo1 <- reloo(m1, loo = loo(m1, overwrite = TRUE), chains = 3)
+
+expose_functions(m1rstan, vectorize = TRUE)
+
+loo(m1rstan)
+loo(m1rstan, moment_match = TRUE)
+loo(m1rstan, reloo = TRUE)
 
 loo_compare(m1,m2)
 
