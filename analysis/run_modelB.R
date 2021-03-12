@@ -27,7 +27,7 @@ study_data = remove_empty_rows(study_data)
 #study_data$nTrialLevelScale = study_data$nTrialLevel/mean(study_data$nTrialLevel)
 
 study_data_timed = study_data[study_data$LevelType == 0,]
-study_data_timed = add_nTrialScale(study_data_timed)
+study_data_timed = add_nTrialScaled(study_data_timed)
 
 
 
@@ -42,8 +42,8 @@ priorModelB = c (priors_accuracy, priors_duration, priors_jymmin)
 ModelB =  brm (
   data = study_data_timed,
   formula =
-    bf (DurationInSeconds|vint(ClocksInSet) ~ 1 + Jymmin*nTrialScale + (1 + nTrialScale|s|SubjectCode) + (1 + nTrialScale|l|Level) , family = sum_shifted_lognormal)+
-    bf (nCorrect|vint(ClocksInSet) ~ 1 + Jymmin*nTrialScale + (1 + nTrialScale|s|SubjectCode) + (1 + nTrialScale|l|Level) , family = beta_binomial2)
+    bf (ResponseTime|vint(ClocksInSet) ~ 1 + Jymmin*nTrialScaled + (1 + nTrialScaled|s|SubjectCode) + (1 + nTrialScaled|l|Level) , family = sum_shifted_lognormal)+
+    bf (nCorrect|vint(ClocksInSet) ~ 1 + Jymmin*nTrialScaled + (1 + nTrialScaled|s|SubjectCode) + (1 + nTrialScaled|l|Level) , family = beta_binomial2)
   ,
   prior = priorModelB,
   #backend = 'cmdstanr',

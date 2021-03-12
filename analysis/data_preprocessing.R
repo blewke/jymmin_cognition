@@ -21,8 +21,8 @@ data_preprocessing = function (datafilename, dateformat = 'dmy'){
                                'Engagement')
   colnames(all_data) = replace(colnames(all_data),
                                match('Duration.Seconds.', colnames(all_data)),
-                               'DurationInSeconds')
-  all_data$TimePerClock = all_data$DurationInSeconds / all_data$ClocksInSet
+                               'ResponseTime')
+  all_data$TimePerClock = all_data$ResponseTime / all_data$ClocksInSet
   
   
   all_data$TimePoint = NA
@@ -212,13 +212,13 @@ add_nTrialLevel = function(df){
 #' @return same dataframe data frame with the additional columnn nTrialScaled.
 
 
-add_nTrialScale = function(df){
+add_nTrialScaled = function(df){
   
   #for every subject and every level, find out how many trails have occurred
   trials = aggregate(df[,c('ClocksInSet')], by = list(SubjectCode = df$SubjectCode, Level = df$Level), FUN = sum)
   mean_nTrials_perS_perL = mean(trials$x)
-  df$nTrialScale = NA
-  df$nTrialScale = df$nTrialLevel/mean_nTrials_perS_perL
+  df$nTrialScaled = NA
+  df$nTrialScaled = df$nTrialLevel/mean_nTrials_perS_perL
   return(df)
 }
   

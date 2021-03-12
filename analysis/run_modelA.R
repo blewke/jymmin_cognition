@@ -1,5 +1,5 @@
 require(brms)
-require(cmdstanr)
+#require(cmdstanr)
 
 #set the number of cores for reloo
 options(mc.cores = 6)
@@ -30,7 +30,7 @@ study_data = rdata[rdata$Period %in% 1:2  & rdata$Stage == 'Exercise',]
 study_data = remove_empty_rows(study_data)
 
 study_data_timed = study_data[study_data$LevelType == 0,]
-study_data_timed = add_nTrialScale(study_data_timed)
+study_data_timed = add_nTrialScaled(study_data_timed)
 
 
 rm(all_data)
@@ -44,8 +44,8 @@ priorModelA = c (priors_accuracy, priors_duration)
 ModelA =  brm (
   data = study_data_timed,
   formula =
-    bf (DurationInSeconds|vint(ClocksInSet) ~ 1 + nTrialScale + (1 + nTrialScale|s|SubjectCode) + (1 + nTrialScale|l|Level) , family = sum_shifted_lognormal)+
-    bf (nCorrect|vint(ClocksInSet) ~ 1 + nTrialScale + (1 + nTrialScale|s|SubjectCode) + (1 + nTrialScale|l|Level) , family = beta_binomial2)
+    bf (ResponseTime|vint(ClocksInSet) ~ 1 + nTrialScaled + (1 + nTrialScaled|s|SubjectCode) + (1 + nTrialScaled|l|Level) , family = sum_shifted_lognormal)+
+    bf (nCorrect|vint(ClocksInSet) ~ 1 + nTrialScaled + (1 + nTrialScaled|s|SubjectCode) + (1 + nTrialScaled|l|Level) , family = beta_binomial2)
   ,
   prior = priorModelA,
   #backend = 'cmdstanr',
