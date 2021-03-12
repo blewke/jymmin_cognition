@@ -101,11 +101,17 @@ summary(ModelA)
 
 expose_functions(ModelA, vectorize = TRUE)
 
-ModelA_loo = loo(ModelA, moment_match = TRUE)
+#ModelA_loo = loo(ModelA, moment_match = TRUE)
 
-ModelA_loo
+#ModelA_loo
 
-save(list = 'ModelA_loo', file ='../results/ModelA_loo_delta085).RData')
+print('try reeloo')
+options(mc.cores = 6)
+#ModelA_reloo = loo(ModelA, reloo = TRUE, reloo_args = list(cores = 6, chains = 6))
+ModelA_reloo = loo(ModelA, reloo = TRUE)
+ModelA_reloo
+
+save(list = 'ModelA_reloo', file ='../results/ModelA_reloo_delta085).RData')
 
 #model$loo <- loo(model, reloo= TRUE)
 
