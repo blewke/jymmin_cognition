@@ -14,7 +14,7 @@ stan_funs_ssln <- "
   
   real var_sum = log((exp(square(sigma_underlying))-1)/set_size + 1 );
   real mu_sum = log(set_size*exp(mu_underlying))+0.5*(square(sigma_underlying) - var_sum);
-  real new_y = y - ndt_underlying*set_size;
+  real new_y = max([0.0, y - ndt_underlying*set_size]);
   
   return lognormal_lpdf(new_y | mu_sum, sqrt(var_sum));
   }
