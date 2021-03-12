@@ -1,5 +1,8 @@
 require(brms)
 
+#set the number of cores for reloo
+options(mc.cores = 6)
+
 #brms families
 source("../analysis/data_preprocessing.R")
 source('../helper_functions/sum_shifted_lognormal family.R')
@@ -63,8 +66,6 @@ sessionInfo()
 
 expose_functions(ModelB, vectorize = TRUE)
 
-ModelB_loo = loo(ModelB, moment_match = TRUE)
+ModelB = add_criterion(ModelB, 'loo', reloo = TRUE)
 
-ModelB_loo
-
-save(list = 'ModelB2_loo', file ='../results/ModelB_loo.RData')
+loo(ModelB)
