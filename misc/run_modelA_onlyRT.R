@@ -27,7 +27,7 @@ study_data = rdata[rdata$Period %in% 1:2  & rdata$Stage == 'Exercise',]
 study_data = remove_empty_rows(study_data)
 
 study_data_timed = study_data[study_data$LevelType == 0,]
-study_data_timed = add_nTrialScale(study_data_timed)
+study_data_timed = add_nTrialScaled(study_data_timed)
 
 
 rm(all_data)
@@ -76,7 +76,7 @@ priorModelA_rt = priors_duration
 ModelA =  brm (
   data = study_data_timed,
   formula =
-    bf (DurationInSeconds|vint(ClocksInSet) ~ 1 + nTrialScale + (1 + nTrialScale|s|SubjectCode) + (1 + nTrialScale|l|Level) , family = sum_shifted_lognormal)#+
+    bf (ResponseTime|vint(ClocksInSet) ~ 1 + nTrialScaled + (1 + nTrialScaled|s|SubjectCode) + (1 + nTrialScaled|l|Level) , family = sum_shifted_lognormal)#+
     #bf (nCorrect|vint(ClocksInSet) ~ 1 + nTrialScale + (1 + nTrialScale|s|SubjectCode) + (1 + nTrialScale|l|Level) , family = beta_binomial2)
   ,
   prior = priorModelA_rt,
@@ -89,9 +89,9 @@ ModelA =  brm (
   warmup = 1000,
   iter = 1800,
   seed = 4,
-  file = '../results/ModelA_rtdelta085',
+  file = '../results/ModelA_rtdelta090_reloo',
   #sample_file = '../results/ModelArtchaindata',
-  control = list(adapt_delta = 0.85, max_treedepth = 14)
+  control = list(adapt_delta = 0.90, max_treedepth = 14)
   
 )
 

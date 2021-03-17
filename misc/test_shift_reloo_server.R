@@ -45,7 +45,7 @@ lreloo2
 
 
 #source('../misc/test_sum_shifted_lognormal family.R')
-source('../helper_functions/beta binomial family.R')
+source('../helper_functions/sum_shifted_lognormal family.R')
 
 stanvars_ssln <- stanvar(scode = stan_funs_ssln, block = "functions")
 
