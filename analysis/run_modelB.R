@@ -55,7 +55,7 @@ ModelB =  brm (
   warmup = 1000,
   iter = 1800,
   seed = 4,
-  file = '../results/ModelB',
+  file = '../results/ModelB_20210317',
   sample_file = '../results/ModelBchaindata',
   control = list(adapt_delta = 0.95, max_treedepth = 14)
 )
@@ -65,6 +65,8 @@ summary(ModelB)
 sessionInfo()
 
 expose_functions(ModelB, vectorize = TRUE)
+
+loo(ModelB)
 
 ModelB = add_criterion(ModelB, 'loo', reloo = TRUE)
 
