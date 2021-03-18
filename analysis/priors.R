@@ -56,10 +56,10 @@ priors_accuracy = c(
 
   
 priors_jymmin = c( prior(normal(0,0.5), class = b, coef = 'JymminYes', resp = 'ResponseTime'),
-                   prior(normal(0,0.5), class = b, coef = 'JymminYes:nTrialScaled', resp = 'ResponseTime'),
+                   prior(normal(0,0.25), class = b, coef = 'JymminYes:nTrialScaled', resp = 'ResponseTime'),
                    
                    prior(normal(0,0.75), class = b, coef = 'JymminYes', resp = 'nCorrect'),
-                   prior(normal(0,0.75), class = b, coef = 'JymminYes:nTrialScaled', resp = 'nCorrect')
+                   prior(normal(0,0.4), class = b, coef = 'JymminYes:nTrialScaled', resp = 'nCorrect')
 )
 
 
