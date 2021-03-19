@@ -208,7 +208,7 @@ for(s in 1:nSubjects){
         
         RT_mean = RT_Intercept + nTrials * RT_Slope
         
-        RT_sum = sum(set*RT_shift + exp(rnorm(set, RT_mean, RT_sd)))
+        RT_sum = sum(RT_shift + exp(rnorm(set, RT_mean, RT_sd)))
         
         sim_dat$RT[r] = RT_sum
         
@@ -271,4 +271,4 @@ write.csv(sim_dat, '../jym_data/sim_dat_RT_acc.csv')
 # ggplot(sim_dat, aes(x = nTrialLevel, y = Accuracy/ClocksInSet))+
 #   geom_point(size = 0.01)+
 #   facet_grid(Level~SubjectCode)
-# 
+
