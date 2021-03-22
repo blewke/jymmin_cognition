@@ -57,9 +57,9 @@ ModelA =  brm (
   warmup = 1000,
   iter = 1800,
   seed = 4,
-  file = '../results/ModelA_20210308',
+  file = '../results/ModelA_20210322',
   sample_file = '../results/ModelAchaindata',
-  control = list(adapt_delta = 0.95, max_treedepth = 14)
+  control = list(adapt_delta = 0.97, max_treedepth = 14)
   
 )
 
@@ -68,6 +68,11 @@ summary(ModelA)
 sessionInfo()
 
 expose_functions(ModelA, vectorize = TRUE)
+
+basic_loo_A = loo(ModelA)
+basic_loo_A
+
+save(list = 'basic_loo_A', file ='../results/ModelA_basic_loo.RData')
 
 ModelA = add_criterion(ModelA, 'loo', reloo = TRUE)
 

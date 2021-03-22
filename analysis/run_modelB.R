@@ -55,9 +55,9 @@ ModelB =  brm (
   warmup = 1000,
   iter = 1800,
   seed = 4,
-  file = '../results/ModelB_20210317',
-  sample_file = '../results/ModelBchaindata',
-  control = list(adapt_delta = 0.95, max_treedepth = 14)
+  file = '../results/ModelB_20210320',
+  sample_file = '../results/ModelBchaindata_0320',
+  control = list(adapt_delta = 0.97, max_treedepth = 14)
 )
 
 summary(ModelB)
