@@ -42,7 +42,7 @@ ModelB_sim =  brm (
   warmup = 1000,
   iter = 1800,
   seed = 4,
-  file = '../results/ModelB_sim_20210318',
+  file = '../results/ModelB_sim_20210319',
   sample_file = '../results/ModelBchaindata',
   control = list(adapt_delta = 0.95, max_treedepth = 14)
 )

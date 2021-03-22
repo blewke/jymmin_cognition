@@ -70,7 +70,7 @@ priorModelA_rt = priors_duration
 ModelA =  brm (
   data = study_data_timed,
   formula =
-    bf (ResponseTime|vint(ClocksInSet) ~ 1 + nTrialScaled + (1 + nTrialScaled|s|SubjectCode)+ (1 + nTrialScale|l|Level),
+    bf (ResponseTime|vint(ClocksInSet) ~ 1 + nTrialScaled + (1 + nTrialScaled|s|SubjectCode)+ (1 + nTrialScaled|l|Level),
         shift ~ (1|Level),
         sigma ~ (1|Level),
         family = sum_shifted_lognormal)#+
