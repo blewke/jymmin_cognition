@@ -23,6 +23,7 @@ sim_dat$Jymmin[sim_dat$Jymmin == 0] = 'No'
 
 sim_dat = add_nTrialScaled(sim_dat)
 
+filename = '../results/ModelB_sim_20210324'
 
 priorModelB = c (priors_accuracy, priors_duration, priors_jymmin)
 
@@ -42,9 +43,9 @@ ModelB_sim =  brm (
   warmup = 1000,
   iter = 1800,
   seed = 4,
-  file = '../results/ModelB_sim_20210319',
+  file = filename,
   sample_file = '../results/ModelBchaindata',
-  control = list(adapt_delta = 0.95, max_treedepth = 14)
+  control = list(adapt_delta = 0.97, max_treedepth = 14)
 )
 
 summary(ModelB_sim)
@@ -53,8 +54,8 @@ sessionInfo()
 
 expose_functions(ModelB_sim, vectorize = TRUE)
 
-loo(ModelB_sim)
+#loo(ModelB_sim)
 
-ModelB_sim = add_criterion(ModelB_sim, 'loo', reloo = TRUE)
+ModelB_sim = add_criterion(ModelB_sim, 'loo', reloo = TRUE, file = filename)
 
 loo(ModelB_sim)

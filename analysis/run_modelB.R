@@ -36,6 +36,7 @@ rm(subject_data)
 rm(study_data)
 rm(rdata)
 
+filename = '../results/ModelB_20210320'
 
 priorModelB = c (priors_accuracy, priors_duration, priors_jymmin)
 
@@ -55,7 +56,7 @@ ModelB =  brm (
   warmup = 1000,
   iter = 1800,
   seed = 4,
-  file = '../results/ModelB_20210320',
+  file = filename,
   sample_file = '../results/ModelBchaindata_0320',
   control = list(adapt_delta = 0.97, max_treedepth = 14)
 )
@@ -66,8 +67,13 @@ sessionInfo()
 
 expose_functions(ModelB, vectorize = TRUE)
 
+basic_loo_B = loo(ModelB)
+basic_loo_B
+
+save(list = 'basic_loo_B', file ='../results/ModelB_basic_loo.RData')
+
 loo(ModelB)
 
-ModelB = add_criterion(ModelB, 'loo', reloo = TRUE)
+ModelB = add_criterion(ModelB, 'loo', reloo = TRUE, file = filename)
 
 loo(ModelB)

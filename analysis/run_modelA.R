@@ -38,6 +38,7 @@ rm(subject_data)
 rm(study_data)
 rm(rdata)
 
+filename = '../results/ModelA_20210322'
 
 priorModelA = c (priors_accuracy, priors_duration)
 
@@ -57,7 +58,7 @@ ModelA =  brm (
   warmup = 1000,
   iter = 1800,
   seed = 4,
-  file = '../results/ModelA_20210322',
+  file = filename,
   sample_file = '../results/ModelAchaindata',
   control = list(adapt_delta = 0.97, max_treedepth = 14)
   
@@ -74,7 +75,7 @@ basic_loo_A
 
 save(list = 'basic_loo_A', file ='../results/ModelA_basic_loo.RData')
 
-ModelA = add_criterion(ModelA, 'loo', reloo = TRUE)
+ModelA = add_criterion(ModelA, 'loo', reloo = TRUE, file = filename)
 
 loo(ModelA)
 
