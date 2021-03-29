@@ -7,7 +7,7 @@
 # treatment (yes/no)
 # level
 
-set.seed(512)
+set.seed(567)
 
 require(tibble)
 
@@ -24,53 +24,55 @@ RT_BetweenLevelMean = 0
 RT_BetweenLevelVariation = 0.25
 #WithinLevelTypeVariation = 0.2
 
+trial_scale_factor = 4000
+
 
 Acc_BetweenSubjectMean = 0.0
-Acc_BetweenSubjectVariation = 0.01
+Acc_BetweenSubjectVariation = 0.8
 #EndpointRange = c(0.9,1)
-Acc_BetweenLevelMean = 0.8
-Acc_BetweenLevelVariation = 0.2
+Acc_BetweenLevelMean = 0.7
+Acc_BetweenLevelVariation = 0.5
 #WithinLevelTypeVariation = 0.2
 
 
 
 
-RT_BetweenSubjectSlopeMean = -0.0005
-RT_BetweenSubjectSlopeVariation = 0.0002
-RT_BetweenLevelSlopeMean = -0.0005
-RT_BetweenLevelSlopeVariation = 0.00002
+RT_BetweenSubjectSlopeMean = -0.000025
+RT_BetweenSubjectSlopeVariation = 0.0001
+RT_BetweenLevelSlopeMean = -0.00015
+RT_BetweenLevelSlopeVariation = 0.0001
 #WithinLevelTypeSlopeVariation = 2
 
 
-Acc_BetweenSubjectSlopeMean = 0.0001
-Acc_BetweenSubjectSlopeVariation = 0.00002
-Acc_BetweenLevelSlopeMean = 0.0002
-Acc_BetweenLevelSlopeVariation = 0.0002
+Acc_BetweenSubjectSlopeMean = 0.00005
+Acc_BetweenSubjectSlopeVariation = 0.000025
+Acc_BetweenLevelSlopeMean = 0.0001
+Acc_BetweenLevelSlopeVariation = 0.0001
 #WithinLevelTypeSlopeVariation = 2
 
 
 
-RT_sd = 0.5
-RT_shift = 1
+RT_sd = 1.3
+RT_shift = 2
 
 
 
 
 Acc_JymminIntercept = 1
 #JymminSlopeFactor = 1
-Acc_JymminSlopeAdd = 0.0000
+Acc_JymminSlopeAdd = 0.0002
 
 
 RT_JymminIntercept = -0.2
 #JymminSlopeFactor = 1
-RT_JymminSlopeAdd = 0.0000
+RT_JymminSlopeAdd = -0.0001
 
 
 theta = 30
 
 stopRatio = 0.9
-setsAfterStopRatio = c(1, 30)
-max_TrialsPerSet = 3500
+setsAfterStopRatio = c(1, 100)
+max_TrialsPerSet = 2.5*trial_scale_factor
 
 
 #nTrialsMin = 50
@@ -243,13 +245,43 @@ for(s in 1:nSubjects){
 
 sim_dat = sim_dat[!is.na(sim_dat$SubjectCode),]
 
-write.csv(sim_dat, '../jym_data/sim_dat_RT_acc.csv')
+nfrom_level = c(20,12,5,3)
 
-# 
+
+from_level1 = sample(1:23, nfrom_level[1])
+from_level2 = sample(1:23, nfrom_level[2])
+from_level3 = append(sample(from_level1, nfrom_level[3]), c(1:23)[!1:23 %in% from_level1])
+from_level4 = sample(1:23, nfrom_level[4])
+
+
+
+# sim_dat_select = sim_dat[sim_dat$Level == 1 & sim_dat$SubjectCode %in% sample(1:23, from_level[1])
+#                         |sim_dat$Level == 2 & sim_dat$SubjectCode %in% sample(1:23, from_level[2])
+#                         |sim_dat$Level == 3 & sim_dat$SubjectCode %in% sample(1:23, from_level[3])
+#                         |sim_dat$Level == 4 & sim_dat$SubjectCode %in% sample(1:23, from_level[4])
+#                            
+#                          ,]
+
+
+sim_dat_select = sim_dat[sim_dat$Level == 1 & sim_dat$SubjectCode %in% from_level1
+                         |sim_dat$Level == 2 & sim_dat$SubjectCode %in% from_level2
+                         |sim_dat$Level == 3 & sim_dat$SubjectCode %in% from_level3
+                         |sim_dat$Level == 4 & sim_dat$SubjectCode %in% from_level4
+                         
+                         ,]
+
+
+
+
+write.csv(sim_dat, '../jym_data/sim_dat.csv')
+write.csv(sim_dat_select, '../jym_data/sim_dat_select.csv')
+
+# # 
 # print(nrow(sim_dat))
-# 
+# # 
 # require(ggplot2)
-# ggplot(sim_dat, aes(x = nTrialLevel, y = Accuracy/ClocksInSet, color = as.factor(Jymmin)))+
+# #ggplot(sim_dat, aes(x = nTrialLevel, y = Accuracy/ClocksInSet, color = as.factor(Jymmin)))+
+# ggplot(sim_dat_select, aes(x = nTrialLevel, y = Accuracy/ClocksInSet, color = as.factor(Jymmin)))+ 
 #   geom_line(alpha = 0.5)+
 #   facet_grid(Level~SubjectCode)
 # 
@@ -271,4 +303,9 @@ write.csv(sim_dat, '../jym_data/sim_dat_RT_acc.csv')
 # ggplot(sim_dat, aes(x = nTrialLevel, y = Accuracy/ClocksInSet))+
 #   geom_point(size = 0.01)+
 #   facet_grid(Level~SubjectCode)
+# 
+
+
+
+
 
