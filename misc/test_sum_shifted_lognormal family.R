@@ -50,7 +50,10 @@ log_lik_sum_shifted_lognormal <- function(i, prep) {
 
 posterior_predict_sum_shifted_lognormal <- function(i, prep, ...) {
   mu_underlying <- prep$dpars$mu[, i]
-  sigma_underlying <- prep$dpars$sigma[, i]
+  
+  sigma_underlying <- prep$dpars$sigma
+  #sigma_underlying <- prep$dpars$sigma[, i]
+  
   #ndt_underlying <- prep$dpars$ndt
   #ndt_underlying <- prep$dpars$shift[i]### added i
   ndt_underlying <- prep$dpars$shift[, i]
