@@ -36,7 +36,7 @@ rm(subject_data)
 rm(study_data)
 rm(rdata)
 
-filename = '../results/ModelB_20210320'
+filename = '../results/ModelB_20210326'
 
 priorModelB = c (priors_accuracy, priors_duration, priors_jymmin)
 
@@ -57,7 +57,7 @@ ModelB =  brm (
   iter = 1800,
   seed = 4,
   file = filename,
-  sample_file = '../results/ModelBchaindata_0320',
+  sample_file = '../results/ModelBchaindata_0326',
   control = list(adapt_delta = 0.97, max_treedepth = 14)
 )
 
