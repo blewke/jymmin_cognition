@@ -7,7 +7,7 @@
 # treatment (yes/no)
 # level
 
-set.seed(567)
+set.seed(123)
 
 require(tibble)
 
@@ -30,7 +30,7 @@ trial_scale_factor = 4000
 Acc_BetweenSubjectMean = 0.0
 Acc_BetweenSubjectVariation = 0.8
 #EndpointRange = c(0.9,1)
-Acc_BetweenLevelMean = 0.7
+Acc_BetweenLevelMean = 0.9
 Acc_BetweenLevelVariation = 0.5
 #WithinLevelTypeVariation = 0.2
 
@@ -44,10 +44,10 @@ RT_BetweenLevelSlopeVariation = 0.0001
 #WithinLevelTypeSlopeVariation = 2
 
 
-Acc_BetweenSubjectSlopeMean = 0.00005
-Acc_BetweenSubjectSlopeVariation = 0.000025
-Acc_BetweenLevelSlopeMean = 0.0001
-Acc_BetweenLevelSlopeVariation = 0.0001
+Acc_BetweenSubjectSlopeMean = 0.0001
+Acc_BetweenSubjectSlopeVariation = 0.00003
+Acc_BetweenLevelSlopeMean = 0.0000
+Acc_BetweenLevelSlopeVariation = 0.00007
 #WithinLevelTypeSlopeVariation = 2
 
 
@@ -58,9 +58,9 @@ RT_shift = 2
 
 
 
-Acc_JymminIntercept = 1
+Acc_JymminIntercept = 0.5
 #JymminSlopeFactor = 1
-Acc_JymminSlopeAdd = 0.0002
+Acc_JymminSlopeAdd = 0.0001
 
 
 RT_JymminIntercept = -0.2
@@ -161,7 +161,7 @@ for(s in 1:nSubjects){
         RT_Intercept = RT_Intercept + RT_JymminIntercept
         RT_Slope =  RT_Slope + RT_JymminSlopeAdd
         Acc_Intercept = Acc_Intercept + Acc_JymminIntercept
-        Acc_Slope =  Acc_Slope + RT_JymminSlopeAdd
+        Acc_Slope =  Acc_Slope + Acc_JymminSlopeAdd
       }
       
       
@@ -270,11 +270,11 @@ sim_dat_select = sim_dat[sim_dat$Level == 1 & sim_dat$SubjectCode %in% from_leve
                          
                          ,]
 
+#print(nrow(sim_dat_select))
 
 
-
-write.csv(sim_dat, '../jym_data/sim_dat.csv')
-write.csv(sim_dat_select, '../jym_data/sim_dat_select.csv')
+#write.csv(sim_dat, '../jym_data/sim_dat.csv')
+#(sim_dat_select, '../jym_data/sim_dat_select.csv')
 
 # # 
 # print(nrow(sim_dat))
@@ -294,16 +294,16 @@ write.csv(sim_dat_select, '../jym_data/sim_dat_select.csv')
 # 
 # 
 # 
-# 
-# 
-# ggplot(sim_dat, aes(x = nTrialLevel, y = RT/ClocksInSet))+
+# # 
+# # 
+# ggplot(sim_dat_select, aes(x = nTrialLevel, y = RT/ClocksInSet))+
 #   geom_point(size = 0.01)+
 #   facet_grid(Level~SubjectCode)
 # 
-# ggplot(sim_dat, aes(x = nTrialLevel, y = Accuracy/ClocksInSet))+
+# ggplot(sim_dat_select, aes(x = nTrialLevel, y = Accuracy/ClocksInSet, color = Jymmin))+
 #   geom_point(size = 0.01)+
 #   facet_grid(Level~SubjectCode)
-# 
+
 
 
 
