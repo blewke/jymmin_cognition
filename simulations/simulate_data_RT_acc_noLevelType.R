@@ -273,8 +273,8 @@ sim_dat_select = sim_dat[sim_dat$Level == 1 & sim_dat$SubjectCode %in% from_leve
 #print(nrow(sim_dat_select))
 
 
-#write.csv(sim_dat, '../jym_data/sim_dat.csv')
-#(sim_dat_select, '../jym_data/sim_dat_select.csv')
+write.csv(sim_dat, '../jym_data/sim_dat.csv')
+write.csv(sim_dat_select, '../jym_data/sim_dat_select.csv')
 
 # # 
 # print(nrow(sim_dat))
