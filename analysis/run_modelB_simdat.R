@@ -13,7 +13,7 @@ stanvars_bb_ssln <- stanvar(scode = paste(stan_funs_ssln, stan_funs), block = "f
 #priors
 source("../analysis/priors.R")
 
-sim_dat = read.csv('../jym_data/sim_dat_RT_acc.csv')
+sim_dat = read.csv('../jym_data/sim_dat_select.csv')
 
 names(sim_dat)[names(sim_dat) == "RT"] <- "ResponseTime"
 names(sim_dat)[names(sim_dat) == "Accuracy"] <- "nCorrect"
@@ -23,7 +23,7 @@ sim_dat$Jymmin[sim_dat$Jymmin == 0] = 'No'
 
 sim_dat = add_nTrialScaled(sim_dat)
 
-filename = '../results/ModelB_sim_20210324'
+filename = '../results/ModelB_sim_20210330'
 
 priorModelB = c (priors_accuracy, priors_duration, priors_jymmin)
 
