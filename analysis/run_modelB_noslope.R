@@ -36,15 +36,15 @@ rm(subject_data)
 rm(study_data)
 rm(rdata)
 
-filename = '../results/ModelB_20210326'
+filename = '../results/ModelB_noslope_20210401'
 
-priorModelB = c (priors_accuracy, priors_duration, priors_jymmin)
+priorModelB = c (priors_accuracy, priors_duration, priors_jymmin[c(1,3),])
 
 ModelB =  brm (
   data = study_data_timed,
   formula =
-    bf (ResponseTime|vint(ClocksInSet) ~ 1 + Jymmin*nTrialScaled + (1 + nTrialScaled|s|SubjectCode) + (1 + nTrialScaled|l|Level) , family = sum_shifted_lognormal)+
-    bf (nCorrect|vint(ClocksInSet) ~ 1 + Jymmin*nTrialScaled + (1 + nTrialScaled|s|SubjectCode) + (1 + nTrialScaled|l|Level) , family = beta_binomial2)
+    bf (ResponseTime|vint(ClocksInSet) ~ 1 + Jymmin + nTrialScaled + (1 + nTrialScaled|s|SubjectCode) + (1 + nTrialScaled|l|Level) , family = sum_shifted_lognormal)+
+    bf (nCorrect|vint(ClocksInSet) ~ 1 + Jymmin + nTrialScaled + (1 + nTrialScaled|s|SubjectCode) + (1 + nTrialScaled|l|Level) , family = beta_binomial2)
   ,
   prior = priorModelB,
   #backend = 'cmdstanr',
@@ -57,7 +57,7 @@ ModelB =  brm (
   iter = 1800,
   seed = 4,
   file = filename,
-  sample_file = '../results/ModelBchaindata_0326',
+  sample_file = '../results/ModelBchaindata_0401',
   control = list(adapt_delta = 0.97, max_treedepth = 14)
 )
 
@@ -67,10 +67,10 @@ sessionInfo()
 
 expose_functions(ModelB, vectorize = TRUE)
 
-basic_loo_B = loo(ModelB)
-basic_loo_B
+basic_loo_B_noslope = loo(ModelB)
+basic_loo_B_noslope
 
-save(list = 'basic_loo_B', file ='../results/ModelB_basic_loo.RData')
+save(list = 'basic_loo_B_noslope', file ='../results/ModelB_noslope_basic_loo.RData')
 
 loo(ModelB)
 
