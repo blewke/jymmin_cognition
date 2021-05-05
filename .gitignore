@@ -11,3 +11,4 @@
 *.tex
 .Rproj.user
 *.DS_Store
+!jym_data/sim_dat_select.csv
