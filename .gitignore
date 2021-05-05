@@ -1,6 +1,6 @@
 .Rhistory
 .Rprofile
-*.csv
+jym_data/*.csv
 *.sav
 *.sas7bdat
 *.xlsx
