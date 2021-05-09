@@ -212,13 +212,6 @@
       "Repository": "CRAN",
       "Hash": "08cf4045c149a0f0eaf405324c7495bd"
     },
-    "cmdstanr": {
-      "Package": "cmdstanr",
-      "Version": "0.3.0",
-      "Source": "unknown",
-      "Remotes": "stan-dev/posterior",
-      "Hash": "88757678c3430d20a1e376096ce6856e"
-    },
     "coda": {
       "Package": "coda",
       "Version": "0.19-3",
@@ -247,6 +240,13 @@
       "Repository": "CRAN",
       "Hash": "98ca919385a634e5d558e6938755e0bf"
     },
+    "cowplot": {
+      "Package": "cowplot",
+      "Version": "1.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b418e8423699d11c7f2087c2bfd07da2"
+    },
     "crayon": {
       "Package": "crayon",
       "Version": "1.3.4",
@@ -267,13 +267,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "2b7d10581cc730804e9ed178c8374bd6"
-    },
-    "data.table": {
-      "Package": "data.table",
-      "Version": "1.13.6",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "813fa8857aaa949b243e2e0b4abb8592"
     },
     "dbplyr": {
       "Package": "dbplyr",
@@ -527,6 +520,13 @@
       "Repository": "CRAN",
       "Hash": "6d927978fc658d24175ce37db635f9e5"
     },
+    "latex2exp": {
+      "Package": "latex2exp",
+      "Version": "0.5.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f96b4c78546d415fa21c99e83629543a"
+    },
     "lattice": {
       "Package": "lattice",
       "Version": "0.20-41",
@@ -729,18 +729,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "ec0e5ab4e5f851f6ef32cd1d1984957f"
-    },
-    "posterior": {
-      "Package": "posterior",
-      "Version": "0.1.3",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "posterior",
-      "RemoteUsername": "stan-dev",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "2c0a2f1113d241a757c139b1d8147a7df7726bdd",
-      "Hash": "6ab3493606f9d4dfeabc112802282d1e"
     },
     "praise": {
       "Package": "praise",
