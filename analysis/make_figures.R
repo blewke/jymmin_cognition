@@ -136,6 +136,8 @@ sample_data_ns$SubjectCode =  substr(sample_data_ns$SubjectCode,1,2)
 
 #####model B
 
+##caution, making this plot takes a long time
+
 bayesplot::color_scheme_set('blue')
 cs = bayesplot::color_scheme_get()
 cs = c(cs[[1]],cs[[2]],cs[[3]],cs[[4]],cs[[5]],cs[[6]])
@@ -143,11 +145,7 @@ cs = c(cs[[1]],cs[[2]],cs[[3]],cs[[4]],cs[[5]],cs[[6]])
 RTB = pp_check(mB, resp = 'ResponseTime', nsamples = NULL)+
   xlim(0,1000)+
   xlab('response time in seconds')+
-  #scale_color_discrete(name = '', labels = c(y = "data", yrep ="model predictions"))+
   scale_color_manual(name = '', values = c(cs[5], cs[2]), labels = c(y = "data", yrep ="model predictions"))+
-
-  #scale_color_identity(name = '', labels = c("data","model predictions"))+
-  #legend_relabel(c("data", "model prediction"))+
   bayesplot::legend_move(c(0.75, 0.5))+
   ylab('density')+
   theme(plot.margin=unit(c(0.5,0.5,0.5,0.5),"cm"),
@@ -187,11 +185,7 @@ cs = c(cs[[1]],cs[[2]],cs[[3]],cs[[4]],cs[[5]],cs[[6]])
 RTA = pp_check(mA, resp = 'ResponseTime', nsamples = NULL)+
   xlim(0,1000)+
   xlab('response time in seconds')+
-  #scale_color_discrete(name = '', labels = c(y = "data", yrep ="model predictions"))+
   scale_color_manual(name = '', values = c(cs[5], cs[2]), labels = c(y = "data", yrep ="model predictions"))+
-
-  #scale_color_identity(name = '', labels = c("data","model predictions"))+
-  #legend_relabel(c("data", "model prediction"))+
   bayesplot::legend_move(c(0.75, 0.5))+
   ylab('density')+
   theme(plot.margin=unit(c(0.5,0.5,0.5,0.5),"cm"),
@@ -218,7 +212,7 @@ AccA  = pp_check(mA, resp = 'nCorrect', type = 'bars', nsamples = NULL, prob = 1
 
 bayesplot::color_scheme_set(cs)
 
-
+# put all the subplots together
 plot_grid(RTA,RTB,AccA,AccB,
           labels=c("A", "B", 'C','D' ),
           ncol = 2, 
@@ -235,11 +229,10 @@ plot_grid(RTA,RTB,AccA,AccB,
 # Model fit of Model A
 
 
-
+#plot the accuracy
 pdAAcc = ggplot(pdA, aes(x = nTrialScaled, y = nCorrect/ClocksInSet, color = Jymmin))+
   geom_ribbon(aes(ymin = Q2.5.nCorrect/ClocksInSet, ymax = Q97.5.nCorrect/ClocksInSet), alpha = 0.25, color = NA)+
   geom_point(alpha = 0.3, size = 0.01)+
-  #geom_ribbon(aes(ymin = Q25.nCorrect/ClocksInSet, ymax = Q75.nCorrect/ClocksInSet), alpha = 0.4, color = NA, fill = 'deepskyblue1')+
   geom_line(aes(y = Estimate.nCorrect/ClocksInSet), color = 'black')+
   facet_grid(Level~SubjectCode)+
   xlab(TeX('$T$',italic=TRUE))+
@@ -251,25 +244,22 @@ pdAAcc = ggplot(pdA, aes(x = nTrialScaled, y = nCorrect/ClocksInSet, color = Jym
                       labels = c('control', 'Jymmin'),
                       guide = guide_legend(override.aes = list(size = 1, alpha = 1) ))+
   theme(panel.grid.minor.x = element_blank(),
-        #panel.grid.major = element_line(colour = "grey"),
         panel.background = element_rect(fill = "grey96"
-                                        #, colour = "grey50"
                                         ))
 
+# get the legend
 legend_Jym_points_bottom = cowplot::get_legend(
   pdAAcc+ 
     guides(color = guide_legend(nrow = 1, override.aes = list(size = 1, alpha = 1))) +
-    #guide = guide_legend(override.aes = list(size = 1, alpha = 1) )+
     theme(legend.position = "bottom")
 )
 
 
 
-
+#plot the response time
 pdART = ggplot(pdA, aes(x = nTrialScaled, y = ResponseTime/ClocksInSet, color = Jymmin))+
   
   geom_ribbon(aes(ymin = Q2.5.ResponseTime/ClocksInSet, ymax = Q97.5.ResponseTime_capped/ClocksInSet), alpha = 0.25, color = NA)+
-  #geom_ribbon(aes(ymin = Q25.ResponseTime/ClocksInSet, ymax = Q75.ResponseTime/ClocksInSet), alpha = 0.4, color = NA)+
   geom_point(alpha = 0.3, size = 0.01)+
   geom_line(aes(y = Estimate.ResponseTime/ClocksInSet), color = 'black')+
   facet_grid(Level~SubjectCode)+
@@ -281,13 +271,11 @@ pdART = ggplot(pdA, aes(x = nTrialScaled, y = ResponseTime/ClocksInSet, color = 
   scale_colour_manual(values = unname(jym_colors),
                       guide = guide_legend(override.aes = list(size = 1, alpha = 1) ))+
   theme(panel.grid.minor.x = element_blank(),
-        #panel.grid.major = element_line(colour = "grey"),
         panel.background = element_rect(fill = "grey96"
-                                        #, colour = "grey50"
         ))
   
 
-
+# put the two plots together
 cowplot::plot_grid(add_label_strips(pdART +  theme(legend.position="none")),
                    add_label_strips(pdAAcc +  theme(legend.position="none")),
                    legend_Jym_points_bottom,
@@ -306,10 +294,11 @@ cowplot::plot_grid(add_label_strips(pdART +  theme(legend.position="none")),
 ########## figure 3 #########-------------------------------
 #Model fit of Model B
 
+#plot accuracy
+
 pdBAcc = ggplot(pdB, aes(x = nTrialScaled, y = nCorrect/ClocksInSet, color = Jymmin))+
   geom_ribbon(aes(ymin = Q2.5.nCorrect/ClocksInSet, ymax = Q97.5.nCorrect/ClocksInSet), alpha = 0.25, color = NA)+
   geom_point(alpha = 0.3, size = 0.01)+
-  #geom_ribbon(aes(ymin = Q25.nCorrect/ClocksInSet, ymax = Q75.nCorrect/ClocksInSet), alpha = 0.4, color = NA, fill = 'deepskyblue1')+
   geom_line(aes(y = Estimate.nCorrect/ClocksInSet), color = 'black')+
   facet_grid(Level~SubjectCode)+
   xlab(TeX('$T$',italic=TRUE))+
@@ -321,25 +310,15 @@ pdBAcc = ggplot(pdB, aes(x = nTrialScaled, y = nCorrect/ClocksInSet, color = Jym
                       labels = c('control', 'Jymmin'),
                       guide = guide_legend(override.aes = list(size = 1, alpha = 1) ))+
   theme(panel.grid.minor.x = element_blank(),
-        #panel.grid.major = element_line(colour = "grey"),
         panel.background = element_rect(fill = "grey96"
-                                        #, colour = "grey50"
                                         ))
 
-# legend_Jym_points_bottom = cowplot::get_legend(
-#   pdBAcc+ 
-#     guides(color = guide_legend(nrow = 1, override.aes = list(size = 1, alpha = 1))) +
-#     #guide = guide_legend(override.aes = list(size = 1, alpha = 1) )+
-#     theme(legend.position = "bottom")
-# )
 
-
-
+#plot response time
 
 pdBRT = ggplot(pdB, aes(x = nTrialScaled, y = ResponseTime/ClocksInSet, color = Jymmin))+
   
   geom_ribbon(aes(ymin = Q2.5.ResponseTime/ClocksInSet, ymax = Q97.5.ResponseTime_capped/ClocksInSet), alpha = 0.25, color = NA)+
-  #geom_ribbon(aes(ymin = Q25.ResponseTime/ClocksInSet, ymax = Q75.ResponseTime/ClocksInSet), alpha = 0.4, color = NA)+
   geom_point(alpha = 0.3, size = 0.01)+
   geom_line(aes(y = Estimate.ResponseTime/ClocksInSet), color = 'black')+
   facet_grid(Level~SubjectCode)+
@@ -351,13 +330,11 @@ pdBRT = ggplot(pdB, aes(x = nTrialScaled, y = ResponseTime/ClocksInSet, color = 
   scale_colour_manual(values = unname(jym_colors),
                       guide = guide_legend(override.aes = list(size = 1, alpha = 1) ))+
   theme(panel.grid.minor.x = element_blank(),
-        #panel.grid.major = element_line(colour = "grey"),
         panel.background = element_rect(fill = "grey96"
-                                        #, colour = "grey50"
         ))
   
 
-
+# put the two plots together, reuse legend from figure before
 cowplot::plot_grid(add_label_strips(pdBRT +  theme(legend.position="none")),
                    add_label_strips(pdBAcc +  theme(legend.position="none")),
                    legend_Jym_points_bottom,
@@ -761,92 +738,37 @@ ggplot(sample_data_ns[sample_data_ns$nTrialScaled ==0 & sample_data_ns$ClocksInS
 ########## figure 13 #########-------------------------------
 # simulated data set
 
-
+#plot accuracy 
 simAcc = ggplot(mBsim$data, aes(x = nTrialScaled, y = nCorrect/ClocksInSet, color = Jymmin))+
-  #geom_ribbon(aes(ymin = Q2.5.nCorrect/ClocksInSet, ymax = Q97.5.nCorrect/ClocksInSet), alpha = 0.25, color = NA)+
   geom_point(alpha = 0.3, size = 0.01)+
-  #geom_ribbon(aes(ymin = Q25.nCorrect/ClocksInSet, ymax = Q75.nCorrect/ClocksInSet), alpha = 0.4, color = NA, fill = 'deepskyblue1')+
-  #geom_line(aes(y = Estimate.nCorrect/ClocksInSet), color = 'black')+
   facet_grid(Level~SubjectCode)+
-  #ggtitle('Simulated data')+
   scale_x_continuous(breaks= c(0,1,2),labels = c(0,1,2))+
   xlab(TeX('$T$',italic=TRUE))+
   theme(text = element_text(family = "serif"))+
   ylab('(number of correct responses)/(set size)')+
-  #scale_colour_manual(values = unname(jym_colors),
   scale_colour_manual(values = jym_colors,
                       name = 'condition',
                       labels = c('control', 'Jymmin'),
                       guide = guide_legend(override.aes = list(size = 1, alpha = 1) ))+
   theme(panel.grid.minor.x = element_blank(),
-        #panel.grid.major = element_line(colour = "grey"),
         panel.background = element_rect(fill = "grey96"
-                                        #, colour = "grey50"
         ))
 
-
-# Labels 
-#labelR = "level"
-#labelT = "participant"
-
-# Get the ggplot grob
+# add label strips
 zsimAcc = add_label_strips (simAcc + theme(legend.position="none"))
 
-# zsimAcc <- ggplotGrob(simAcc + theme(legend.position="none"))
-# 
-# # Get the positions of the strips in the gtable: t = top, l = left, ...
-# posR <- subset(zsimAcc$layout, grepl("strip-r", name), select = t:r)
-# posT <- subset(zsimAcc$layout, grepl("strip-t", name), select = t:r)
-# 
-# # Add a new column to the right of current right strips, 
-# # and a new row on top of current top strips
-# width <- zsimAcc$widths[max(posR$r)]    # width of current right strips
-# height <- zsimAcc$heights[min(posT$t)]  # height of current top strips
-# 
-# zsimAcc <- gtable_add_cols(zsimAcc, width, max(posR$r))  
-# zsimAcc <- gtable_add_rows(zsimAcc, height, min(posT$t)-1)
-# 
-# # Construct the new strip grobs
-# stripR <- gTree(name = "Strip_right", children = gList(
-#   rectGrob(gp = gpar(col = NA, fill = "grey85")),
-#   textGrob(labelR, rot = -90, gp = gpar(fontsize = 8.8, col = "grey10"))))
-# 
-# stripT <- gTree(name = "Strip_top", children = gList(
-#   rectGrob(gp = gpar(col = NA, fill = "grey85")),
-#   textGrob(labelT, gp = gpar(fontsize = 8.8, col = "grey10"))))
-# 
-# # Position the grobs in the gtable
-# zsimAcc <- gtable_add_grob(zsimAcc, stripR, t = min(posR$t)+1, l = max(posR$r) + 1, b = max(posR$b)+1, name = "strip-right")
-# zsimAcc <- gtable_add_grob(zsimAcc, stripT, t = min(posT$t), l = min(posT$l), r = max(posT$r), name = "strip-top")
-# 
-# # Add small gaps between strips
-# zsimAcc <- gtable_add_cols(zsimAcc, unit(1/5, "line"), max(posR$r))
-# zsimAcc <- gtable_add_rows(zsimAcc, unit(1/5, "line"), min(posT$t))
-
-# Draw it
-#grid.newpage()
-#grid.draw(zsimAcc)
-
-
-
-#cowplot::plot_grid(zsimAcc)
 
 
 
 
-
-
-##### RT
+#plot  RT
 
 simRT = ggplot(mBsim$data, aes(x = nTrialScaled, y = ResponseTime/ClocksInSet, color = Jymmin))+
   
-  #geom_ribbon(aes(ymin = Q2.5.ResponseTime/ClocksInSet, ymax = Q97.5.ResponseTime_capped/ClocksInSet), alpha = 0.25, color = NA)+
-  #geom_ribbon(aes(ymin = Q25.ResponseTime/ClocksInSet, ymax = Q75.ResponseTime/ClocksInSet), alpha = 0.4, color = NA)+
+
   geom_point(alpha = 0.3, size = 0.01)+
-  #geom_line(aes(y = Estimate.ResponseTime/ClocksInSet), color = 'black')+
   facet_grid(Level~SubjectCode)+
   ylim(0,85)+
-  #ggtitle('Simulated data')+
   xlab(TeX('$T$',italic=TRUE))+
   theme(text = element_text(family = "serif"))+
   ylab('(response time in seconds)/(set size)')+
@@ -856,69 +778,20 @@ simRT = ggplot(mBsim$data, aes(x = nTrialScaled, y = ResponseTime/ClocksInSet, c
                       labels = c('control', 'Jymmin'),
                       guide = guide_legend(override.aes = list(size = 1, alpha = 1) ))+
   theme(panel.grid.minor.x = element_blank(),
-        #panel.grid.major = element_line(colour = "grey"),
         panel.background = element_rect(fill = "grey96"
-                                        #, colour = "grey50"
         ))
 
 
-
+# add label strips
 zsimRT = add_label_strips (simRT + theme(legend.position="none"))
-# 
-# zsimRT<- ggplotGrob(simRT +  theme(legend.position="none"))
-# 
-# # Get the positions of the strips in the gtable: t = top, l = left, ...
-# posR <- subset(zsimRT$layout, grepl("strip-r", name), select = t:r)
-# posT <- subset(zsimRT$layout, grepl("strip-t", name), select = t:r)
-# 
-# # Add a new column to the right of current right strips, 
-# # and a new row on top of current top strips
-# width <- zsimRT$widths[max(posR$r)]    # width of current right strips
-# height <- zsimRT$heights[min(posT$t)]  # height of current top strips
-# 
-# zsimRT <- gtable_add_cols(zsimRT, width, max(posR$r))  
-# zsimRT <- gtable_add_rows(zsimRT, height, min(posT$t)-1)
-# 
-# # Construct the new strip grobs
-# stripR <- gTree(name = "Strip_right", children = gList(
-#   rectGrob(gp = gpar(col = NA, fill = "grey85")),
-#   textGrob(labelR, rot = -90, gp = gpar(fontsize = 8.8, col = "grey10"))))
-# 
-# stripT <- gTree(name = "Strip_top", children = gList(
-#   rectGrob(gp = gpar(col = NA, fill = "grey85")),
-#   textGrob(labelT, gp = gpar(fontsize = 8.8, col = "grey10"))))
-# 
-# # Position the grobs in the gtable
-# zsimRT <- gtable_add_grob(zsimRT, stripR, t = min(posR$t)+1, l = max(posR$r) + 1, b = max(posR$b)+1, name = "strip-right")
-# zsimRT <- gtable_add_grob(zsimRT, stripT, t = min(posT$t), l = min(posT$l), r = max(posT$r), name = "strip-top")
-# 
-# # Add small gaps between strips
-# zsimRT <- gtable_add_cols(zsimRT, unit(1/5, "line"), max(posR$r))
-# zsimRT <- gtable_add_rows(zsimRT, unit(1/5, "line"), min(posT$t))
-# 
-# 
-# 
-# # legend_bsimdat = cowplot::get_legend(
-# #   simRT + 
-# #     guides(color = guide_legend(nrow = 1, override.aes = list(size = 1, alpha = 1))) +
-# #     #guide = guide_legend(override.aes = list(size = 1, alpha = 1) )+
-# #     theme(legend.position = "bottom")
-# # )
-# 
 
 
-#grid.newpage()
-#grid.draw(zsimRT)
-
-
-
-cowplot::plot_grid(zsimRT, #+  theme(legend.position="none"),
-                   zsimAcc, #+  theme(legend.position="none"),
+# combine the two plots, add laegend from figure 2
+cowplot::plot_grid(zsimRT, 
+                   zsimAcc,
                    legend_Jym_points_bottom,
                    rel_heights = c(1, 1, 0.1),
                    labels=c("A", "B" ,''),
-                   #align = 'hv',
-                   #legend,
                    label_fontfamily = "serif",
                    ncol = 1,
                    nrow = 3)
@@ -928,7 +801,7 @@ cowplot::plot_grid(zsimRT, #+  theme(legend.position="none"),
 #pp_checks simulation models
 
 
-
+#caution, making this plot takes a long time
 
 #####model B
 
@@ -939,11 +812,7 @@ cs = c(cs[[1]],cs[[2]],cs[[3]],cs[[4]],cs[[5]],cs[[6]])
 RTB = pp_check(mBsim, resp = 'ResponseTime', nsamples = NULL)+
   xlim(0,1000)+
   xlab('response time in seconds')+
-  #scale_color_discrete(name = '', labels = c(y = "data", yrep ="model predictions"))+
   scale_color_manual(name = '', values = c(cs[5], cs[2]), labels = c(y = "data", yrep ="model predictions"))+
-
-  #scale_color_identity(name = '', labels = c("data","model predictions"))+
-  #legend_relabel(c("data", "model prediction"))+
   bayesplot::legend_move(c(0.75, 0.5))+
   ylab('density')+
   theme(plot.margin=unit(c(0.5,0.5,0.5,0.5),"cm"),
@@ -955,8 +824,6 @@ RTB = pp_check(mBsim, resp = 'ResponseTime', nsamples = NULL)+
 
 
 
-
-#cs = c(cs[[1]],cs[[2]],cs[[3]],cs[[4]],cs[[5]],cs[[6]])
 cs_new = cs
 cs_new[6] = cs[2]
 cs_new[1] = cs[5]
@@ -986,11 +853,7 @@ cs = c(cs[[1]],cs[[2]],cs[[3]],cs[[4]],cs[[5]],cs[[6]])
 RTA = pp_check(mAsim, resp = 'ResponseTime', nsamples = NULL)+
   xlim(0,1000)+
   xlab('response time in seconds')+
-  #scale_color_discrete(name = '', labels = c(y = "data", yrep ="model predictions"))+
   scale_color_manual(name = '', values = c(cs[5], cs[2]), labels = c(y = "data", yrep ="model predictions"))+
-
-  #scale_color_identity(name = '', labels = c("data","model predictions"))+
-  #legend_relabel(c("data", "model prediction"))+
   bayesplot::legend_move(c(0.75, 0.5))+
   ylab('density')+
   theme(plot.margin=unit(c(0.5,0.5,0.5,0.5),"cm"),
@@ -1001,7 +864,6 @@ RTA = pp_check(mAsim, resp = 'ResponseTime', nsamples = NULL)+
 
 
 
-#cs = c(cs[[1]],cs[[2]],cs[[3]],cs[[4]],cs[[5]],cs[[6]])
 cs_new = cs
 cs_new[6] = cs[2]
 cs_new[1] = cs[5]
@@ -1020,10 +882,7 @@ AccA  = pp_check(mAsim, resp = 'nCorrect', type = 'bars', nsamples = NULL, prob 
 bayesplot::color_scheme_set(cs)
 
 
-
-#grid.arrange(RTA, RTB, AccA,AccB,nrow = 2, labels=c('A', 'B', 'C', 'D'))
-
-
+# combine the plots
 plot_grid(RTA,RTB,AccA,AccB,
           labels=c("A", "B", 'C','D' ),
           ncol = 2, 
@@ -1031,7 +890,7 @@ plot_grid(RTA,RTB,AccA,AccB,
           align = 'hv',
           label_fontfamily = "serif")
 
-#plot_grid(RTA,RTB, labels=c("A", "B" ), ncol = 2, nrow = 1)
+
 
 
 ########## figure 15 #########-------------------------------
