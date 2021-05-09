@@ -62,12 +62,3 @@ priors_jymmin = c( prior(normal(0,0.5), class = b, coef = 'JymminYes', resp = 'R
                    prior(normal(0,0.4), class = b, coef = 'JymminYes:nTrialScaled', resp = 'nCorrect')
 )
 
-
-
-priors_period = c( prior(normal(0,0.5), class = b, coef = 'Period2', resp = 'ResponseTime'),
-                   prior(normal(0,0.5), class = b, coef = 'Period2:nTrialScaled', resp = 'ResponseTime'),
-                   
-                   prior(normal(0,0.75), class = b, coef = 'Period2', resp = 'nCorrect'),
-                   prior(normal(0,0.75), class = b, coef = 'Period2:nTrialScaled', resp = 'nCorrect')
-)
-
