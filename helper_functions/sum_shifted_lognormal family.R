@@ -1,14 +1,15 @@
+### a custom brms family for the sum-shift-lognormal family
+
+
 require(brms)
 
 sum_shifted_lognormal <- custom_family(
-  #"sum_shifted_lognormal", dpars = c("mu", "sigma",'ndt'),
   "sum_shifted_lognormal", dpars = c("mu", "sigma",'shift'),
   links = c('identity', "identity", 'identity'), lb = c(NA, 0, NA),
   type = "real", vars = "vint1[n]"
 )
 
 
-#stan_funs <- "
 stan_funs_ssln <- "
   real sum_shifted_lognormal_lpdf(real y, real mu_underlying, real sigma_underlying, real ndt_underlying,int set_size) {
   
@@ -34,22 +35,18 @@ stan_funs_ssln <- "
 log_lik_sum_shifted_lognormal <- function(i, prep) {
   mu <- prep$dpars$mu[, i]
   sigma <- prep$dpars$sigma
-  #ndt <- prep$dpars$ndt
   shift <- prep$dpars$shift
   set_size <- prep$data$vint1[i]
   y <- prep$data$Y[i]
   sum_shifted_lognormal_lpdf(y, mu, sigma, shift, set_size)
-  #shifted_lognormal_lpdf(y, mu, sigma, shift, set_size)
-  #sum_shifted_lognormal_lpdf(y, mu, sigma, shift, set_size)
-}
 
+}
 
 
 
 posterior_predict_sum_shifted_lognormal <- function(i, prep, ...) {
   mu_underlying <- prep$dpars$mu[, i]
   sigma_underlying <- prep$dpars$sigma
-  #ndt_underlying <- prep$dpars$ndt
   ndt_underlying <- prep$dpars$shift
   set_size <- prep$data$vint1[i]
   
@@ -60,7 +57,6 @@ posterior_predict_sum_shifted_lognormal <- function(i, prep, ...) {
 
 
 
-######this is correct now maybe??? !!!!!!!!!
 posterior_epred_sum_shifted_lognormal <- function(prep) {
   mu_underlying <- prep$dpars$mu
   set_size <- prep$data$vint1
