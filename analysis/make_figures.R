@@ -892,7 +892,6 @@ plot_grid(RTA,RTB,AccA,AccB,
 
 
 
-
 ########## figure 15 #########-------------------------------
 #Posterior parameter distribution Jym params Model B_sim
 
